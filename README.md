@@ -66,7 +66,7 @@ totp.now # => "492039"
 
 # OTP verified for current time with 120 seconds allowed drift
 totp.verify_with_drift("492039", 60, Time.now - 30) # => true
-totp.verify_with_drift("492039", 60, Time.now - 90) # => false
+totp.verify_with_drift("492039", 60, Time.now - 90) # => nil
 ```
 
 ### Preventing reuse of Time based OTP's
@@ -85,7 +85,7 @@ user.last_otp_at # => 1472145530
 verified_at_timestamp = totp.verify_with_drift_and_prior("492039", 0, user.last_otp_at) #=> 1472145760
 # Store this on the user's account
 user.update(last_otp_at: verified_at_timestamp)
-verified_at_timestamp = totp.verify_with_drift_and_prior("492039", 0, user.last_otp_at) #=> false
+verified_at_timestamp = totp.verify_with_drift_and_prior("492039", 0, user.last_otp_at) #=> nil
 ```
 
 ### Generating a Base32 Secret key
