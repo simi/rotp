@@ -16,7 +16,16 @@ Many websites use this for [multi-factor authentication](https://www.youtube.com
 * OpenSSL
 * Ruby 2.0 or higher
 
-## Breaking changes in >= 4.0
+## Breaking changes
+
+### Breaking changes in >= 5.0
+
+- `ROTP::Base32.random_base32` is now `ROTP::Base32.random` and the argument
+  has changed from secret string length to byte length to allow for more
+  precision
+- Cleaned up the Base32 implementation to better match Google Authenticator's version
+
+### Breaking changes in >= 4.0
 
 - Simplified API
   - `verify` now takes options for `drift` and `after`
@@ -162,7 +171,7 @@ docker run --rm -v $(pwd):/usr/src/app rotp_2.6
 
 ## Executable Usage
 
-The rotp rubygem includes an executable for helping with testing and debugging
+The rotp rubygem includes CLI version to help with testing and debugging
 
 ```bash
 # Try this to get an overview of the commands
