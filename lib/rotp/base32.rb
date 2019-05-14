@@ -2,16 +2,28 @@ module ROTP
   class Base32
     class Base32Error < RuntimeError; end
     CHARS = 'abcdefghijklmnopqrstuvwxyz234567'.each_char.to_a
+    MASK = 31
 
     class << self
+
       def decode(str)
-        str = str.tr('=', '')
-        output = []
-        str.scan(/.{1,8}/).each do |block|
-          char_array = decode_block(block).map(&:chr)
-          output << char_array
+        shift = 5
+        buffer = 0
+        idx = 0
+        bitsLeft = 0
+        str = str.tr('=', '').downcase
+        result = []
+        str.split('').each do |char|
+          buffer = buffer << shift
+          buffer = buffer | (decode_quint(char) & MASK)
+          bitsLeft = bitsLeft + shift
+          if bitsLeft >= 8
+            result[idx] = (buffer >> (bitsLeft - 8)) & 255
+            idx = idx + 1
+            bitsLeft = bitsLeft - 8
+          end
         end
-        output.join
+        result.pack('c*')
       end
 
       def random_base32(length = 32)
@@ -24,28 +36,8 @@ module ROTP
 
       private
 
-      def decode_block(block)
-        length = block.scan(/[^=]/).length
-        quints = block.each_char.map { |c| decode_quint(c) }
-        bytes = []
-        bytes[0] = (quints[0] << 3) + (quints[1] ? quints[1] >> 2 : 0)
-        return bytes if length < 3
-
-        bytes[1] = ((quints[1] & 3) << 6) + (quints[2] << 1) + (quints[3] ? quints[3] >> 4 : 0)
-        return bytes if length < 4
-
-        bytes[2] = ((quints[3] & 15) << 4) + (quints[4] ? quints[4] >> 1 : 0)
-        return bytes if length < 6
-
-        bytes[3] = ((quints[4] & 1) << 7) + (quints[5] << 2) + (quints[6] ? quints[6] >> 3 : 0)
-        return bytes if length < 7
-
-        bytes[4] = ((quints[6] & 7) << 5) + (quints[7] || 0)
-        bytes
-      end
-
       def decode_quint(q)
-        CHARS.index(q.downcase) || raise(Base32Error, "Invalid Base32 Character - '#{q}'")
+        CHARS.index(q) || raise(Base32Error, "Invalid Base32 Character - '#{q}'")
       end
     end
   end

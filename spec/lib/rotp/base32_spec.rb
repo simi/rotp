@@ -33,22 +33,25 @@ RSpec.describe ROTP::Base32 do
 
     context 'valid input data' do
       it 'correctly decodes a string' do
-        expect(ROTP::Base32.decode('F').unpack('H*').first).to eq '28'
         expect(ROTP::Base32.decode('23').unpack('H*').first).to eq 'd6'
-        expect(ROTP::Base32.decode('234').unpack('H*').first).to eq 'd6f8'
-        expect(ROTP::Base32.decode('234A').unpack('H*').first).to eq 'd6f800'
-        expect(ROTP::Base32.decode('234B').unpack('H*').first).to eq 'd6f810'
-        expect(ROTP::Base32.decode('234BCD').unpack('H*').first).to eq 'd6f8110c'
-        expect(ROTP::Base32.decode('234BCDE').unpack('H*').first).to eq 'd6f8110c80'
-        expect(ROTP::Base32.decode('234BCDEFG').unpack('H*').first).to eq 'd6f8110c8530'
-        expect(ROTP::Base32.decode('234BCDEFG234BCDEFG').unpack('H*').first).to eq 'd6f8110c8536b7c0886429'
+        expect(ROTP::Base32.decode('234A').unpack('H*').first).to eq 'd6f8'
+        expect(ROTP::Base32.decode('234BCD').unpack('H*').first).to eq 'd6f811'
+        expect(ROTP::Base32.decode('234BCDE').unpack('H*').first).to eq 'd6f8110c'
+        expect(ROTP::Base32.decode('234BCDEFG').unpack('H*').first).to eq 'd6f8110c85'
+      end
+
+      it 'correctly decode strings with trailing bits (not a multiple of 8)' do
+        # Dropbox style 26 characters (130 bits, but chopped to 128)
+        # Matches the behavior of Google Authenticator
+        expect(ROTP::Base32.decode('HQQE3KKCST7YEEB64NHJN52LJA').unpack('H*').first).to eq '00443214c7e739ce739c00443214c7d7'
       end
 
       context 'with padding' do
         it 'correctly decodes a string' do
-          expect(ROTP::Base32.decode('F==').unpack('H*').first).to eq '28'
+          expect(ROTP::Base32.decode('234A===').unpack('H*').first).to eq 'd6f8'
         end
       end
+
     end
   end
 end
