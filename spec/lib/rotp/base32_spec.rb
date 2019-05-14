@@ -5,8 +5,9 @@ RSpec.describe ROTP::Base32 do
     context 'without arguments' do
       let(:base32) { ROTP::Base32.random }
 
-      it 'is 32 characters long' do
-        expect(ROTP::Base32.decode(base32).length).to eq 32
+      it 'is 20 bytes (160 bits) long (resulting in a 32 character base32 code)' do
+        expect(ROTP::Base32.decode(base32).length).to eq 20
+        expect(base32.length).to eq 32
       end
 
       it 'is base32 charset' do
@@ -17,7 +18,7 @@ RSpec.describe ROTP::Base32 do
     context 'with arguments' do
       let(:base32) { ROTP::Base32.random 48 }
 
-      it 'returns the appropriate length code' do
+      it 'returns the appropriate byte length code' do
         expect(ROTP::Base32.decode(base32).length).to eq 48
       end
     end

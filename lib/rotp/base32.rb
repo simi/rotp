@@ -52,8 +52,8 @@ module ROTP
         return out
       end
 
-      # Defaults to 256 bit long secret
-      def random(byte_length = 32)
+      # Defaults to 160 bit long secret (meaning a 32 character long base32 secret)
+      def random(byte_length = 20)
        rand_bytes = SecureRandom.random_bytes(byte_length)
        self.encode(rand_bytes)
       end
