@@ -43,7 +43,7 @@ RSpec.describe ROTP::Base32 do
       it 'correctly decode strings with trailing bits (not a multiple of 8)' do
         # Dropbox style 26 characters (130 bits, but chopped to 128)
         # Matches the behavior of Google Authenticator
-        expect(ROTP::Base32.decode('HQQE3KKCST7YEEB64NHJN52LJA').unpack('H*').first).to eq '00443214c7e739ce739c00443214c7d7'
+        expect(ROTP::Base32.decode('HQQE3KKCST7YEEB64NHJN52LJA').unpack('H*').first).to eq '3c204da94294ff82103ee34e96f74b48'
       end
 
       context 'with padding' do
