@@ -54,6 +54,7 @@
   - `OTP#generate_otp`
   - `TOTP#at`
   - `TOTP#now` (first argument)
+  - `TOTP#verify_with_drift` and `TOTP#verify_with_drift_and_prior` merged into `verify`
 
 #### 3.3.1
 
