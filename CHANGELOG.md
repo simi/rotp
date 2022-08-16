@@ -1,5 +1,11 @@
 ### Changelog
 
+### 6.3.0
+
+- Added the ability to add custom provisioning params to the provisionsing URI.
+  See [https://github.com/mdp/rotp/pull/91/files#diff-9e8b926c30dc93664551b47fc0c06eed45307f178b4472842d0716476dd86416R242](https://github.com/mdp/rotp/pull/91/files#diff-9e8b926c30dc93664551b47fc0c06eed45307f178b4472842d0716476dd86416R242) for an example.
+- Matched up TOTP provisioning URI's with HOTP provisioning URI's  - https://github.com/google/google-authenticator/wiki/Key-Uri-Format
+
 ### 6.2.0
 
 - Update to expand compatibility with Ruby 3. This was only a change to the
